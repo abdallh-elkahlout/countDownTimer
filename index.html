@@ -69,47 +69,34 @@
         <div class="container">
             <div id="timer">00:00</div>
             <button id="startStopBtn">Start</button>
-            <button id="pauseBtn">Pause</button>
             <button id="resetBtn">Reset</button>
         </div>
     </div>
 
     <script>
         let timerInterval;
-        let timeLeft;
+        let timeLeft = 0;
         let isTimerRunning = false;
-        let isTimerPaused = false;
-        let pauseStartTime = 0;
+        const startBtnText = 'Start';
 
-        function startStopTimer() {
+        function toggleTimer() {
             if (!isTimerRunning) {
                 isTimerRunning = true;
+                document.getElementById('startStopBtn').innerText = 'Pause';
                 timerInterval = setInterval(updateTimer, 1000);
             } else {
                 isTimerRunning = false;
+                document.getElementById('startStopBtn').innerText = startBtnText;
                 clearInterval(timerInterval);
-            }
-        }
-
-        function pauseTimer() {
-            if (isTimerRunning && !isTimerPaused) {
-                isTimerPaused = true;
-                clearInterval(timerInterval);
-                pauseStartTime = Date.now();
-            } else if (isTimerPaused) {
-                isTimerPaused = false;
-                const pauseTime = Date.now() - pauseStartTime;
-                timeLeft += Math.floor(pauseTime / 1000);
-                timerInterval = setInterval(updateTimer, 1000);
             }
         }
 
         function resetTimer() {
             clearInterval(timerInterval);
             isTimerRunning = false;
-            isTimerPaused = false;
             timeLeft = 0;
             updateTimerDisplay();
+            document.getElementById('startStopBtn').innerText = startBtnText;
         }
 
         function updateTimer() {
@@ -133,19 +120,13 @@
                 const inputMinutes = parseInt(prompt("Enter the number of minutes:"));
                 timeLeft = inputMinutes * 60;
             }
-            startStopTimer();
-        });
-
-        document.getElementById('pauseBtn').addEventListener('click', function () {
-            pauseTimer();
-
+            toggleTimer();
         });
 
         document.getElementById('resetBtn').addEventListener('click', function () {
             resetTimer();
             updateTimerDisplay();
         });
-
     </script>
 </body>
 
